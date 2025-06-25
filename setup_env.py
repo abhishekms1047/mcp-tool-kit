@@ -65,6 +65,18 @@ def main():
             "example": "YOUR_FRED_API_KEY",
             "url": "https://fred.stlouisfed.org/docs/api/api_key.html"
         },
+        "ESPOCRM_BASE_URL": {
+            "description": "Base URL for EspoCRM instance",
+            "required": False,
+            "default": existing_vars.get("ESPOCRM_BASE_URL", "http://localhost:8040"),
+            "example": "http://localhost:8040",
+        },
+        "ESPOCRM_API_KEY": {
+            "description": "API key for EspoCRM REST API",
+            "required": False,
+            "default": existing_vars.get("ESPOCRM_API_KEY", ""),
+            "example": "YOUR_ESPOCRM_API_KEY",
+        },
         "STREAMLIT_APPS_DIR": {
             "description": "Directory for Streamlit applications",
             "required": False,

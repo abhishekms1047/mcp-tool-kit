@@ -457,6 +457,33 @@ try:
 except ImportError as e:
     logging.warning(f"Could not load Leave Management tools: {e}")
 
+# Initialize EspoCRM tools
+try:
+    from app.tools.espocrm import (
+        get_espocrm_tools,
+        set_external_mcp as set_espocrm_mcp,
+        initialize_espocrm_service,
+    )
+
+    set_espocrm_mcp(mcp)
+
+    base_url = os.environ.get("ESPOCRM_BASE_URL")
+    api_key = os.environ.get("ESPOCRM_API_KEY")
+    if base_url and api_key:
+        initialize_espocrm_service(base_url, api_key)
+
+        espocrm_tools = get_espocrm_tools()
+        for tool_name, tool_func in espocrm_tools.items():
+            mcp.tool(name=tool_name)(tool_func)
+
+        logging.info("EspoCRM tools registered successfully.")
+    else:
+        logging.warning(
+            "EspoCRM credentials not configured. EspoCRM tools will not be available."
+        )
+except ImportError as e:
+    logging.warning(f"Could not load EspoCRM tools: {e}")
+
 
 # Validate required environment variables
 REQUIRED_ENV_VARS = {
@@ -467,6 +494,8 @@ REQUIRED_ENV_VARS = {
     "MCP_FILESYSTEM_DIRS": "/path/to/allowed/dir1,/path/to/allowed/dir2",
     "MCP_LOG_LEVEL": "info",
     "VAPID_API_KEY": "your_vapid_api_key",
+    "ESPOCRM_BASE_URL": "http://espocrm",
+    "ESPOCRM_API_KEY": "your_espocrm_api_key",
 }
 
 missing_vars = [var for var in REQUIRED_ENV_VARS if not os.environ.get(var)]
