@@ -426,6 +426,27 @@ try:
 except ImportError as e:
     logging.warning(f"Could not load Streamlit tools: {e}")
 
+# Initialize Leave Management tools
+try:
+    from app.tools.leave_management import (
+        get_leave_management_tools,
+        set_external_mcp as set_leave_mcp,
+        initialize_leave_service,
+    )
+
+    # Pass MCP instance to module
+    set_leave_mcp(mcp)
+    initialize_leave_service()
+
+    # Register leave management tools
+    leave_tools = get_leave_management_tools()
+    for tool_name, tool_func in leave_tools.items():
+        mcp.tool(name=tool_name)(tool_func)
+
+    logging.info("Leave Management tools registered successfully.")
+except ImportError as e:
+    logging.warning(f"Could not load Leave Management tools: {e}")
+
 
 # Validate required environment variables
 REQUIRED_ENV_VARS = {
