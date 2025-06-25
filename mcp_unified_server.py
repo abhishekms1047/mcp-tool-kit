@@ -11,6 +11,9 @@ import uvicorn
 # MCP SDK imports
 from mcp.server.fastmcp import FastMCP, Context
 
+# OAuth2 security utilities
+from app.security import login as oauth_login
+
 logging.basicConfig(
     level=logging.DEBUG if os.environ.get(
         "MCP_LOG_LEVEL", "").lower() == "debug" else logging.INFO,
@@ -31,6 +34,13 @@ mcp = FastMCP(
     dependencies=["newsapi-python", "msal", "python-dotenv",
                   "httpx", "pillow", "requests", "pandas", "python-pptx", "nltk"]
 )
+
+# Register OAuth2 token endpoint
+try:
+    mcp.app.post("/token")(oauth_login)
+    logging.info("OAuth2 token endpoint registered")
+except Exception as e:
+    logging.warning(f"Could not register OAuth2 endpoint: {e}")
 
 # Add a health check endpoint
 
