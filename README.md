@@ -66,6 +66,7 @@ The MCP Unified Server provides a unified interface for Claude to interact with 
 - **Excel**: Create and manipulate Excel spreadsheets
 - **Yahoo Finance**: Stock market and financial data
 - **FRED**: Federal Reserve Economic Data
+- **EspoCRM**: Manage CRM contacts and other records
 - **Agentic capabilities**: Create and deploy autonomous agents that perform complex tasks
 - **And many more specialized tools**
 
@@ -86,6 +87,7 @@ Option 1 - Using docker-compose:
 ```
 docker-compose up
 ```
+This will start the MCP server as well as an EspoCRM instance.
 Option 2 - Direct Docker command:
 ```
 docker run -p 8000:8000 -v ~/documents:/app/documents getfounded/mcp-tool-kit:latest
@@ -197,6 +199,8 @@ Alternatively, you can manually create a `.env` file in the repository root with
 BRAVE_API_KEY=your_brave_api_key
 NEWS_API_KEY=your_news_api_key
 FRED_API_KEY=your_fred_api_key
+ESPOCRM_BASE_URL=http://localhost:8040
+ESPOCRM_API_KEY=your_espocrm_api_key
 
 # Application configuration
 STREAMLIT_APPS_DIR=/path/to/streamlit/apps
@@ -265,6 +269,9 @@ Once set up, you can ask Claude to use the tools with prompts like:
   - `fred_get_category`: Browse data by category
   - `fred_get_releases`: Get economic data releases
   - `fred_get_sources`: Get data sources
+
+### EspoCRM
+- `espocrm_get_contacts`: Retrieve contacts from your EspoCRM instance
 
 ### Time Tools
 - `get_current_time`: Get current time in a specified timezone
