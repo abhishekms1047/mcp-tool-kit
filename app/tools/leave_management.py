@@ -7,6 +7,7 @@ from typing import List
 import logging
 
 from pydantic import BaseModel
+from app.security import verify_token
 
 # Ensure compatibility with MCP server
 from mcp.server.fastmcp import Context
@@ -95,17 +96,19 @@ def _get_leave_service() -> LeaveManagementService:
     return _leave_service_instance
 
 
-async def apply_leave(start_date: str, end_date: str, ctx: Context | None = None) -> str:
-    """Apply for leave between two dates."""
+async def apply_leave(start_date: str, end_date: str, token: str, ctx: Context | None = None) -> str:
+    """Apply for leave between two dates. Requires OAuth2 token."""
     try:
+        verify_token(token)
         return await _get_leave_service().apply_leave(start_date, end_date)
     except Exception as e:
         return json.dumps({"status": "failed", "error": str(e)})
 
 
-async def get_leave_details(ctx: Context | None = None) -> str:
-    """Retrieve current leave balance and history."""
+async def get_leave_details(token: str, ctx: Context | None = None) -> str:
+    """Retrieve current leave balance and history. Requires OAuth2 token."""
     try:
+        verify_token(token)
         return await _get_leave_service().get_leave_details()
     except Exception as e:
         return json.dumps({"status": "failed", "error": str(e)})
