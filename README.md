@@ -160,6 +160,27 @@ Local server basic configuration:
 }
 ```
 
+## Testing the server
+
+Once the server is running you can verify it is responding correctly using `curl`:
+
+```bash
+curl http://localhost:8000/health
+curl -X POST http://localhost:8000/api/tools/initialize -H "Content-Type: application/json" -d '{}'
+```
+
+The health endpoint returns a JSON object similar to:
+
+```json
+{"status": "ok", "timestamp": "..."}
+```
+
+The initialize endpoint responds with details about the running server and a list of available tools:
+
+```json
+{"status": "ok", "server_name": "Unified MCP Server", "version": "...", "tools": [...]} 
+```
+
 ## Configure Claude Desktop to Access Your Server
 
 1. Open Claude Desktop app
